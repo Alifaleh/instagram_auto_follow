@@ -94,7 +94,7 @@ while True:
     followers, next_max_id = get_followers(user_id, max_id = next_max_id)
     for follower in followers:
         follow_response = follow(follower['pk'])
-        print(f'[+] (page:{page} / index:{index}) Started following {follower["username"]} whith status of ({follow_response["status"]}).')
+        print(f'[+] (page:{page} / index:{index}) Started following {follower["username"]} with status of ({follow_response["status"]}).')
         if follow_response["status"] == 'fail':
             print(follow_response["message"])
         index += 1
