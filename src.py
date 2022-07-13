@@ -62,7 +62,8 @@ follow_header = {
 
 def follow(id):
     follow_header['Viewport-Width'] = str(random.randint(1000, 1500))
-    requests.post(f'https://www.instagram.com/web/friendships/{id}/follow/', cookies=cookies, headers=follow_header)
+    response = requests.post(f'https://www.instagram.com/web/friendships/{id}/follow/', cookies=cookies, headers=follow_header)
+    return json.loads(response.text)
 
 
 def get_user_id(user_name):
@@ -86,10 +87,16 @@ def get_followers(id, count = 12, max_id = None):
 # test:
 
 user_id = get_user_id('user.name')
+page = 1
+index = 1
 next_max_id = None
 while True:
     followers, next_max_id = get_followers(user_id, max_id = next_max_id)
     for follower in followers:
-        follow(follower['pk'])
-        print(f'[+] Started following {follower["username"]}.')
+        follow_response = follow(follower['pk'])
+        print(f'[+] (page:{page} / index:{index}) Started following {follower["username"]} whith status of ({follow_response["status"]}).')
+        if follow_response["status"] == 'fail':
+            print(follow_response["message"])
+        index += 1
         time.sleep(2)
+    page += 1
