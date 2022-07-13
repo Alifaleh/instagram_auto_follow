@@ -89,14 +89,16 @@ def get_followers(id, count = 12, max_id = None):
 user_id = get_user_id('user.name')
 page = 1
 index = 1
+start_page = 3
 next_max_id = None
 while True:
     followers, next_max_id = get_followers(user_id, max_id = next_max_id)
-    for follower in followers:
-        follow_response = follow(follower['pk'])
-        print(f'[+] (page:{page} / index:{index}) Started following {follower["username"]} with status of ({follow_response["status"]}).')
-        if follow_response["status"] == 'fail':
-            print(follow_response["message"])
-        index += 1
-        time.sleep(2)
+    if(page >= start_page):
+        for follower in followers:
+            follow_response = follow(follower['pk'])
+            print(f'[+] (page:{page} / index:{index}) Started following {follower["username"]} with status of ({follow_response["status"]}).')
+            if follow_response["status"] == 'fail':
+                print(follow_response["message"])
+            index += 1
+            time.sleep(2)
     page += 1
